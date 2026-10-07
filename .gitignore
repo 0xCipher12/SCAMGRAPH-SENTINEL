@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Large datasets
+data/*.pkl
+data/*.pickle
+data/*.csv
+data/*.parquet
+
+# Raw datasets
+simulated-data-raw-main/
+datasets/
+raw_data/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db

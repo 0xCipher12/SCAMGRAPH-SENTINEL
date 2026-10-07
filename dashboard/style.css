@@ -1,0 +1,646 @@
+/* =========================================================
+   SCAMGRAPH SENTINEL
+   Premium AI Fraud Detection Dashboard
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #07111f;
+    --bg-secondary: #0b1728;
+    --card: rgba(15, 29, 48, 0.82);
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text: #f4f7fb;
+    --muted: #91a1b5;
+    --primary: #38bdf8;
+    --primary-dark: #0284c7;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --input: #0c1b2d;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Inter, "Segoe UI", Arial, sans-serif;
+    color: var(--text);
+
+    background:
+        radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.14), transparent 30%),
+        radial-gradient(circle at 90% 20%, rgba(99, 102, 241, 0.12), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(14, 165, 233, 0.08), transparent 35%),
+        var(--bg);
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 20px 6%;
+
+    background: rgba(7, 17, 31, 0.82);
+    backdrop-filter: blur(18px);
+
+    border-bottom: 1px solid var(--card-border);
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+        135deg,
+        #0ea5e9,
+        #2563eb
+    );
+
+    font-size: 24px;
+
+    box-shadow:
+        0 0 25px rgba(14, 165, 233, 0.35);
+}
+
+.header h1 {
+    font-size: 22px;
+    letter-spacing: 1.5px;
+    font-weight: 800;
+}
+
+.header p {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 9px 15px;
+
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 999px;
+
+    background: rgba(34, 197, 94, 0.08);
+
+    color: #86efac;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+
+    background: var(--success);
+
+    box-shadow:
+        0 0 12px rgba(34, 197, 94, 0.9);
+
+    animation: pulse 1.8s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(0.8);
+    }
+}
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
+.container {
+    width: min(1180px, 92%);
+    margin: 0 auto;
+    padding: 55px 0 70px;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.hero {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.hero-badge {
+    display: inline-block;
+
+    padding: 7px 14px;
+    margin-bottom: 18px;
+
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-radius: 999px;
+
+    background: rgba(56, 189, 248, 0.08);
+
+    color: #7dd3fc;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.hero h2 {
+    font-size: clamp(34px, 5vw, 58px);
+    line-height: 1.05;
+
+    background: linear-gradient(
+        90deg,
+        #ffffff,
+        #7dd3fc,
+        #60a5fa
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.hero p {
+    max-width: 650px;
+    margin: 18px auto 0;
+
+    color: var(--muted);
+    line-height: 1.7;
+    font-size: 16px;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
+
+.card {
+    padding: 30px;
+
+    margin-bottom: 25px;
+
+    background: var(--card);
+
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+
+    box-shadow: var(--shadow);
+
+    backdrop-filter: blur(18px);
+}
+
+.card h2 {
+    margin-bottom: 8px;
+    font-size: 21px;
+}
+
+.card-subtitle {
+    color: var(--muted);
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #cbd5e1;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    color: var(--text);
+    background: var(--input);
+
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 11px;
+
+    outline: none;
+
+    font-size: 14px;
+
+    transition: 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #64748b;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px rgba(56, 189, 248, 0.1);
+
+    background: #102238;
+}
+
+/* =========================================================
+   RISK INDICATORS
+   ========================================================= */
+
+.section-title {
+    margin: 30px 0 15px;
+
+    color: #e2e8f0;
+
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px;
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    color: #cbd5e1;
+
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.checkbox-item:hover {
+    border-color: rgba(56, 189, 248, 0.35);
+    background: rgba(56, 189, 248, 0.05);
+}
+
+.checkbox-item input {
+    accent-color: var(--primary);
+    width: 17px;
+    height: 17px;
+}
+
+/* =========================================================
+   CALCULATED FEATURES
+   ========================================================= */
+
+.calculated-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.calculated-item {
+    padding: 15px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 13px;
+}
+
+.calculated-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.calculated-item strong {
+    font-size: 17px;
+}
+
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
+#predict-button {
+    width: 100%;
+
+    margin-top: 28px;
+    padding: 15px 20px;
+
+    border: none;
+    border-radius: 13px;
+
+    color: white;
+
+    background: linear-gradient(
+        135deg,
+        #0284c7,
+        #2563eb
+    );
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 30px rgba(37, 99, 235, 0.25);
+
+    transition: 0.2s ease;
+}
+
+#predict-button:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 15px 35px rgba(37, 99, 235, 0.4);
+}
+
+#predict-button:active {
+    transform: translateY(0);
+}
+
+#predict-button:disabled {
+    opacity: 0.55;
+    cursor: wait;
+}
+
+/* =========================================================
+   RESULT
+   ========================================================= */
+
+.result-card {
+    min-height: 180px;
+}
+
+.placeholder {
+    margin-top: 20px;
+    padding: 22px;
+
+    border-radius: 14px;
+
+    color: var(--muted);
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.result-box {
+    margin-top: 20px;
+    padding: 25px;
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.result-status {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+.result-label {
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.result-value {
+    font-size: 28px;
+    font-weight: 800;
+}
+
+.result-value.fraud {
+    color: #f87171;
+}
+
+.result-value.legitimate {
+    color: #4ade80;
+}
+
+.risk-bar {
+    height: 12px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #172337;
+}
+
+.risk-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    background: linear-gradient(
+        90deg,
+        #22c55e,
+        #f59e0b,
+        #ef4444
+    );
+
+    transition: width 0.7s ease;
+}
+
+.result-details {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.detail {
+    padding: 13px;
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border-radius: 11px;
+}
+
+.detail span {
+    display: block;
+
+    color: var(--muted);
+    font-size: 11px;
+
+    margin-bottom: 5px;
+}
+
+.detail strong {
+    font-size: 14px;
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.stat-card {
+    padding: 22px;
+
+    border-radius: 17px;
+
+    background: var(--card);
+
+    border: 1px solid var(--card-border);
+
+    box-shadow: var(--shadow);
+}
+
+.stat-card h3 {
+    color: var(--muted);
+
+    font-size: 12px;
+    text-transform: uppercase;
+
+    letter-spacing: 0.8px;
+
+    margin-bottom: 9px;
+}
+
+.stat-card p {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    padding: 25px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .form-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .checkbox-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .header {
+        padding: 16px 4%;
+    }
+
+    .status {
+        display: none;
+    }
+
+    .container {
+        width: 94%;
+        padding-top: 35px;
+    }
+
+    .card {
+        padding: 20px;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calculated-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .result-details {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h2 {
+        font-size: 34px;
+    }
+}

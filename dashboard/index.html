@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SCAMGRAPH SENTINEL | Fraud Detection</title>
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #050912;
+            --panel: #0c1423;
+            --panel2: #101b2e;
+            --border: rgba(148, 163, 184, 0.16);
+
+            --text: #f8fafc;
+            --muted: #94a3b8;
+
+            --cyan: #22d3ee;
+            --blue: #38bdf8;
+
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            color: var(--text);
+
+            background:
+                radial-gradient(
+                    circle at 10% 0%,
+                    rgba(34, 211, 238, 0.10),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(56, 189, 248, 0.08),
+                    transparent 30%
+                ),
+
+                var(--bg);
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .topbar {
+            height: 76px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 42px;
+
+            border-bottom: 1px solid var(--border);
+
+            background: rgba(5, 9, 18, 0.94);
+
+            backdrop-filter: blur(16px);
+
+            position: sticky;
+            top: 0;
+
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+
+            display: grid;
+            place-items: center;
+
+            border-radius: 13px;
+
+            font-size: 22px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0ea5e9,
+                    #22d3ee
+                );
+
+            box-shadow:
+                0 0 28px rgba(34, 211, 238, 0.28);
+        }
+
+        .brand-text h1 {
+            font-size: 19px;
+            letter-spacing: 1.7px;
+            font-weight: 800;
+        }
+
+        .brand-text p {
+            margin-top: 3px;
+
+            color: var(--muted);
+
+            font-size: 10px;
+            letter-spacing: .5px;
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            padding: 9px 15px;
+
+            border-radius: 999px;
+
+            border: 1px solid
+                rgba(34, 197, 94, 0.28);
+
+            background:
+                rgba(34, 197, 94, 0.07);
+
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .status-dot {
+            width: 9px;
+            height: 9px;
+
+            border-radius: 50%;
+
+            background: var(--green);
+
+            box-shadow:
+                0 0 13px
+                rgba(34, 197, 94, .9);
+        }
+
+
+        /* =========================================================
+           MAIN
+        ========================================================= */
+
+        .container {
+            width: min(1400px, 94%);
+
+            margin: auto;
+
+            padding:
+                38px
+                0
+                55px;
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            display: flex;
+
+            align-items: flex-end;
+            justify-content: space-between;
+
+            gap: 30px;
+
+            margin-bottom: 28px;
+        }
+
+        .hero h2 {
+            font-size:
+                clamp(28px, 3vw, 43px);
+
+            line-height: 1.1;
+
+            margin-bottom: 10px;
+        }
+
+        .hero h2 span {
+            color: var(--cyan);
+        }
+
+        .hero p {
+            color: var(--muted);
+
+            max-width: 720px;
+
+            line-height: 1.7;
+
+            font-size: 14px;
+        }
+
+        .system-chip {
+            white-space: nowrap;
+
+            padding: 11px 15px;
+
+            border-radius: 11px;
+
+            border: 1px solid var(--border);
+
+            background:
+                rgba(255,255,255,.025);
+
+            color: #a9c1d8;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           DASHBOARD
+        ========================================================= */
+
+        .dashboard-grid {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.45fr)
+                minmax(330px, .75fr);
+
+            gap: 22px;
+        }
+
+        .card {
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(17,27,45,.97),
+                    rgba(8,14,25,.97)
+                );
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 20px 60px
+                rgba(0,0,0,.22);
+
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 22px 24px;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+        .card-header h3 {
+            font-size: 17px;
+        }
+
+        .card-header p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 6px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+
+        /* =========================================================
+           FORM
+        ========================================================= */
+
+        .section-label {
+            margin:
+                8px 0
+                14px;
+
+            color: #dce7f3;
+
+            font-size: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+        }
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        .form-group label {
+            color: #cbd5e1;
+
+            font-size: 12px;
+
+            font-weight: 600;
+        }
+
+        input,
+        select {
+            width: 100%;
+
+            height: 46px;
+
+            padding:
+                0 14px;
+
+            border-radius: 11px;
+
+            border:
+                1px solid
+                rgba(148,163,184,.17);
+
+            background:
+                rgba(2,6,23,.68);
+
+            color: white;
+
+            outline: none;
+
+            font-size: 13px;
+
+            transition: .2s ease;
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        input:focus,
+        select:focus {
+            border-color:
+                rgba(34,211,238,.75);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(34,211,238,.08);
+        }
+
+        select option {
+            background: #0d1422;
+            color: white;
+        }
+
+
+        /* =========================================================
+           INFO MESSAGE
+        ========================================================= */
+
+        .info-message {
+            margin:
+                -4px
+                0
+                16px;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           RISK INDICATORS
+        ========================================================= */
+
+        .risk-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 10px;
+        }
+
+        .risk-option {
+            position: relative;
+        }
+
+        .risk-option input {
+            position: absolute;
+
+            opacity: 0;
+
+            pointer-events: none;
+        }
+
+        .risk-option label {
+            height: 48px;
+
+            padding:
+                0 12px;
+
+            border-radius: 10px;
+
+            border:
+                1px solid var(--border);
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            cursor: pointer;
+
+            background:
+                rgba(255,255,255,.025);
+
+            transition: .2s ease;
+
+            font-size: 12px;
+        }
+
+        .risk-option label:hover {
+            border-color:
+                rgba(34,211,238,.35);
+        }
+
+        .risk-option input:checked + label {
+            border-color:
+                rgba(245,158,11,.65);
+
+            background:
+                rgba(245,158,11,.10);
+
+            color: #fbbf24;
+
+            box-shadow:
+                0 0 20px
+                rgba(245,158,11,.05);
+        }
+
+
+        /* =========================================================
+           CALCULATED FEATURES
+        ========================================================= */
+
+        .feature-box {
+            margin-top: 22px;
+
+            padding: 17px;
+
+            border-radius: 13px;
+
+            border:
+                1px solid var(--border);
+
+            background:
+                rgba(2,6,23,.32);
+        }
+
+        .feature-box-title {
+            color: #cbd5e1;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            margin-bottom: 12px;
+        }
+
+        .feature-values {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+        }
+
+        .feature-value {
+            padding: 12px;
+
+            border-radius: 9px;
+
+            background:
+                rgba(255,255,255,.025);
+        }
+
+        .feature-value span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-bottom: 5px;
+        }
+
+        .feature-value strong {
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           BUTTON
+        ========================================================= */
+
+        .analyze-btn {
+            width: 100%;
+
+            height: 52px;
+
+            margin-top: 22px;
+
+            border: 0;
+
+            border-radius: 11px;
+
+            cursor: pointer;
+
+            color: #02111a;
+
+            font-size: 14px;
+
+            font-weight: 800;
+
+            letter-spacing: .4px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #22d3ee,
+                    #38bdf8
+                );
+
+            box-shadow:
+                0 10px 30px
+                rgba(34,211,238,.18);
+
+            transition: .2s ease;
+        }
+
+        .analyze-btn:hover {
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 15px 38px
+                rgba(34,211,238,.28);
+        }
+
+        .analyze-btn:disabled {
+            cursor: wait;
+            opacity: .65;
+            transform: none;
+        }
+
+
+        /* =========================================================
+           RESULT
+        ========================================================= */
+
+        .result-placeholder {
+            min-height: 480px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            gap: 13px;
+        }
+
+        .result-icon {
+            width: 68px;
+            height: 68px;
+
+            border-radius: 50%;
+
+            display: grid;
+            place-items: center;
+
+            font-size: 29px;
+
+            background:
+                rgba(56,189,248,.08);
+
+            border:
+                1px solid
+                rgba(56,189,248,.16);
+        }
+
+        .result-placeholder strong {
+            color: #e2e8f0;
+        }
+
+
+        /* =========================================================
+           RESULT CONTENT
+        ========================================================= */
+
+        .result-content {
+            padding: 8px 0;
+        }
+
+        .prediction-top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .result-badge {
+            display: inline-flex;
+
+            padding:
+                8px
+                15px;
+
+            border-radius: 999px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .result-badge.fraud {
+            color: #fecaca;
+
+            background:
+                rgba(239,68,68,.13);
+
+            border:
+                1px solid
+                rgba(239,68,68,.35);
+        }
+
+        .result-badge.legitimate {
+            color: #bbf7d0;
+
+            background:
+                rgba(34,197,94,.12);
+
+            border:
+                1px solid
+                rgba(34,197,94,.30);
+        }
+
+        .risk-circle {
+            width: 110px;
+            height: 110px;
+
+            margin:
+                20px auto;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-direction: column;
+
+            border:
+                1px solid
+                rgba(56,189,248,.25);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(34,211,238,.09),
+                    rgba(2,6,23,.2)
+                );
+
+            box-shadow:
+                0 0 40px
+                rgba(34,211,238,.08);
+        }
+
+        .risk-circle strong {
+            font-size: 28px;
+        }
+
+        .risk-circle span {
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-top: 3px;
+        }
+
+        .result-title {
+            text-align: center;
+
+            font-size: 27px;
+
+            margin-top: 10px;
+        }
+
+        .result-description {
+            text-align: center;
+
+            color: var(--muted);
+
+            line-height: 1.6;
+
+            margin-top: 8px;
+
+            font-size: 13px;
+        }
+
+        .result-metrics {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-top: 25px;
+        }
+
+        .metric {
+            padding: 14px;
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,255,255,.025);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .metric span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            margin-bottom: 6px;
+        }
+
+        .metric strong {
+            font-size: 14px;
+        }
+
+        .fraud-warning {
+            margin-top: 18px;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(239,68,68,.08);
+
+            border:
+                1px solid
+                rgba(239,68,68,.22);
+
+            color: #fecaca;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+        .legitimate-message {
+            margin-top: 18px;
+
+            padding: 13px;
+
+            border-radius: 10px;
+
+            background:
+                rgba(34,197,94,.07);
+
+            border:
+                1px solid
+                rgba(34,197,94,.20);
+
+            color: #bbf7d0;
+
+            font-size: 11px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================================
+           SYSTEM STATS
+        ========================================================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            gap: 14px;
+
+            margin-top: 22px;
+        }
+
+        .stat-card {
+            padding: 18px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(13,20,34,.85);
+
+            border:
+                1px solid var(--border);
+        }
+
+        .stat-icon {
+            font-size: 17px;
+
+            margin-bottom: 12px;
+        }
+
+        .stat-card span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: .8px;
+
+            margin-bottom: 6px;
+        }
+
+        .stat-card strong {
+            font-size: 16px;
+        }
+
+
+        /* =========================================================
+           LOADING
+        ========================================================= */
+
+        .loading {
+            text-align: center;
+
+            padding: 80px 20px;
+
+            color: var(--muted);
+        }
+
+        .spinner {
+            width: 42px;
+            height: 42px;
+
+            margin:
+                0 auto
+                18px;
+
+            border-radius: 50%;
+
+            border:
+                3px solid
+                rgba(56,189,248,.15);
+
+            border-top-color:
+                var(--cyan);
+
+            animation:
+                spin .8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform:
+                    rotate(360deg);
+            }
+        }
+
+
+        /* =========================================================
+           ERROR
+        ========================================================= */
+
+        .error-box {
+            padding: 18px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(239,68,68,.08);
+
+            border:
+                1px solid
+                rgba(239,68,68,.30);
+
+            color: #fecaca;
+
+            line-height: 1.6;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        footer {
+            padding: 28px;
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            border-top:
+                1px solid var(--border);
+        }
+
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 1000px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .topbar {
+                padding: 0 17px;
+            }
+
+            .brand-text p {
+                display: none;
+            }
+
+            .container {
+                width: 92%;
+                padding-top: 25px;
+            }
+
+            .hero {
+                display: block;
+            }
+
+            .system-chip {
+                display: inline-block;
+                margin-top: 15px;
+            }
+
+            .form-grid,
+            .risk-grid,
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .card-body {
+                padding: 18px;
+            }
+
+            .result-metrics,
+            .feature-values {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header class="topbar">
+
+    <div class="brand">
+
+        <div class="brand-icon">
+            🛡️
+        </div>
+
+        <div class="brand-text">
+
+            <h1>
+                SCAMGRAPH SENTINEL
+            </h1>
+
+            <p>
+                AI-POWERED FINANCIAL CRIME DETECTION
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="api-status">
+
+        <span
+            class="status-dot"
+            id="status-dot">
+        </span>
+
+        <span id="api-status">
+            CHECKING API...
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<!-- =========================================================
+     MAIN
+========================================================= -->
+
+<main class="container">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div>
+
+            <h2>
+                Fraud Detection
+                <span>Command Center</span>
+            </h2>
+
+            <p>
+                Analyze financial transactions using the trained
+                SCAMGRAPH SENTINEL machine-learning model and
+                identify suspicious transaction behavior.
+            </p>
+
+        </div>
+
+
+        <div class="system-chip">
+
+            ● MODEL ACTIVE
+            &nbsp; | &nbsp;
+            17 FEATURES
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         DASHBOARD
+    ====================================================== -->
+
+    <div class="dashboard-grid">
+
+
+        <!-- =================================================
+             TRANSACTION FORM
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="card-header">
+
+                <h3>
+                    🔍 Transaction Analysis
+                </h3>
+
+                <p>
+                    Enter transaction details to calculate
+                    fraud risk.
+                </p>
+
+            </div>
+
+
+            <div class="card-body">
+
+
+                <form
+                    id="prediction-form"
+                    autocomplete="off">
+
+
+                    <!-- =====================================
+                         TRANSACTION INFORMATION
+                    ====================================== -->
+
+                    <div class="section-label">
+
+                        Transaction Information
+
+                    </div>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- Amount -->
+
+                        <div class="form-group">
+
+                            <label for="amount">
+                                Transaction Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="amount"
+                                placeholder="e.g. 225.41"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Transaction Seconds -->
+
+                        <div class="form-group">
+
+                            <label for="tx-time">
+                                Transaction Time (seconds)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="tx-time"
+                                value="100"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Transaction Days -->
+
+                        <div class="form-group">
+
+                            <label for="tx-days">
+                                Transaction Time (days)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="tx-days"
+                                value="0"
+                                min="0"
+                                step="1"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Hour -->
+
+                        <div class="form-group">
+
+                            <label for="hour">
+                                Transaction Hour
+                            </label>
+
+                            <input
+                                type="number"
+                                id="hour"
+                                value="12"
+                                min="0"
+                                max="23"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Day -->
+
+                        <div class="form-group">
+
+                            <label for="day">
+                                Day of Week
+                            </label>
+
+                            <select
+                                id="day">
+
+                                <option value="0">
+                                    Monday
+                                </option>
+
+                                <option value="1">
+                                    Tuesday
+                                </option>
+
+                                <option value="2">
+                                    Wednesday
+                                </option>
+
+                                <option value="3">
+                                    Thursday
+                                </option>
+
+                                <option value="4">
+                                    Friday
+                                </option>
+
+                                <option value="5">
+                                    Saturday
+                                </option>
+
+                                <option value="6">
+                                    Sunday
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+
+                        <!-- Day of Month -->
+
+                        <div class="form-group">
+
+                            <label for="day-month">
+                                Day of Month
+                            </label>
+
+                            <input
+                                type="number"
+                                id="day-month"
+                                value="1"
+                                min="1"
+                                max="31"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Month -->
+
+                        <div class="form-group">
+
+                            <label for="month">
+                                Month
+                            </label>
+
+                            <input
+                                type="number"
+                                id="month"
+                                value="1"
+                                min="1"
+                                max="12"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         BEHAVIORAL INTELLIGENCE
+                    ====================================== -->
+
+                    <div class="section-label">
+
+                        Behavioral Intelligence
+
+                    </div>
+
+
+                    <p class="info-message">
+
+                        These values represent customer and
+                        terminal behavior used by the trained
+                        fraud model.
+
+                    </p>
+
+
+                    <div class="form-grid">
+
+
+                        <!-- Customer TX Count -->
+
+                        <div class="form-group">
+
+                            <label for="customer-tx-count">
+                                Customer Transaction Count
+                            </label>
+
+                            <input
+                                type="number"
+                                id="customer-tx-count"
+                                value="1"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Customer Average -->
+
+                        <div class="form-group">
+
+                            <label for="customer-avg">
+                                Customer Average Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="customer-avg"
+                                value="100"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Customer Maximum -->
+
+                        <div class="form-group">
+
+                            <label for="customer-max">
+                                Customer Maximum Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="customer-max"
+                                value="100"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Terminal TX Count -->
+
+                        <div class="form-group">
+
+                            <label for="terminal-tx-count">
+                                Terminal Transaction Count
+                            </label>
+
+                            <input
+                                type="number"
+                                id="terminal-tx-count"
+                                value="1"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+
+
+                        <!-- Terminal Average -->
+
+                        <div class="form-group">
+
+                            <label for="terminal-avg">
+                                Terminal Average Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="terminal-avg"
+                                value="100"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         RISK INDICATORS
+                    ====================================== -->
+
+                    <div class="section-label">
+
+                        Transaction Risk Indicators
+
+                    </div>
+
+
+                    <div class="risk-grid">
+
+
+                        <div class="risk-option">
+
+                            <input
+                                type="checkbox"
+                                id="weekend"
+                            >
+
+                            <label for="weekend">
+                                📅 Weekend
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="risk-option">
+
+                            <input
+                                type="checkbox"
+                                id="night"
+                            >
+
+                            <label for="night">
+                                🌙 Night
+                            </label>
+
+                        </div>
+
+
+
+                        <div class="risk-option">
+
+                            <input
+                                type="checkbox"
+                                id="high-amount"
+                            >
+
+                            <label for="high-amount">
+                                ⚠️ High Amount
+                            </label>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         CALCULATED FEATURES
+                    ====================================== -->
+
+                    <div class="feature-box">
+
+                        <div class="feature-box-title">
+
+                            Calculated Intelligence
+
+                        </div>
+
+
+                        <div class="feature-values">
+
+
+                            <div class="feature-value">
+
+                                <span>
+                                    Amount / Customer Avg
+                                </span>
+
+                                <strong id="customer-ratio">
+                                    0.00
+                                </strong>
+
+                            </div>
+
+
+
+                            <div class="feature-value">
+
+                                <span>
+                                    Amount / Terminal Avg
+                                </span>
+
+                                <strong id="terminal-ratio">
+                                    0.00
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- =====================================
+                         BUTTON
+                    ====================================== -->
+
+                    <button
+                        type="submit"
+                        class="analyze-btn"
+                        id="predict-button">
+
+                        🔍 ANALYZE TRANSACTION
+
+                    </button>
+
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             RESULT CARD
+        ================================================== -->
+
+        <section class="card">
+
+
+            <div class="card-header">
+
+                <h3>
+                    🧠 AI Prediction
+                </h3>
+
+                <p>
+                    Real-time model decision and fraud probability.
+                </p>
+
+            </div>
+
+
+            <div
+                class="card-body"
+                id="prediction-result">
+
+
+                <div class="result-placeholder">
+
+                    <div class="result-icon">
+                        🛡️
+                    </div>
+
+                    <strong>
+                        No transaction analyzed
+                    </strong>
+
+                    <p>
+                        Enter transaction details and run
+                        the analysis.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SYSTEM STATS
+    ====================================================== -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🤖
+            </div>
+
+            <span>
+                Detection Model
+            </span>
+
+            <strong>
+                AI Fraud Engine
+            </strong>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📊
+            </div>
+
+            <span>
+                Features
+            </span>
+
+            <strong>
+                17
+            </strong>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🎯
+            </div>
+
+            <span>
+                Threshold
+            </span>
+
+            <strong>
+                0.50
+            </strong>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ⚡
+            </div>
+
+            <span>
+                System Status
+            </span>
+
+            <strong id="system-status">
+                Checking...
+            </strong>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<footer>
+
+    SCAMGRAPH SENTINEL
+    &nbsp;•&nbsp;
+    AI-POWERED FINANCIAL CRIME DETECTION
+    &nbsp;•&nbsp;
+    LOCAL ML ANALYTICS DEMO
+
+</footer>
+
+
+
+<!-- =========================================================
+     JAVASCRIPT
+     
+     This version is intentionally included directly in
+     index.html so that there is NO mismatch between HTML
+     element IDs and app.js.
+========================================================= -->
+
+<script>
+
+    /* =========================================================
+       API CONFIGURATION
+    ========================================================= */
+
+    const API_URL = "http://127.0.0.1:5000";
+
+
+    /* =========================================================
+       ELEMENTS
+    ========================================================= */
+
+    const form =
+        document.getElementById("prediction-form");
+
+    const resultBox =
+        document.getElementById("prediction-result");
+
+    const button =
+        document.getElementById("predict-button");
+
+    const apiStatus =
+        document.getElementById("api-status");
+
+    const systemStatus =
+        document.getElementById("system-status");
+
+    const statusDot =
+        document.getElementById("status-dot");
+
+
+
+    /* =========================================================
+       HELPER
+    ========================================================= */
+
+    function numberValue(id) {
+
+        const element =
+            document.getElementById(id);
+
+        const value =
+            parseFloat(element.value);
+
+        return Number.isFinite(value)
+            ? value
+            : 0;
+    }
+
+
+
+    /* =========================================================
+       CALCULATE RATIOS
+    ========================================================= */
+
+    function updateRatios() {
+
+        const amount =
+            numberValue("amount");
+
+        const customerAvg =
+            numberValue("customer-avg");
+
+        const terminalAvg =
+            numberValue("terminal-avg");
+
+
+        const customerRatio =
+            customerAvg > 0
+                ? amount / customerAvg
+                : 0;
+
+
+        const terminalRatio =
+            terminalAvg > 0
+                ? amount / terminalAvg
+                : 0;
+
+
+        document.getElementById(
+            "customer-ratio"
+        ).textContent =
+            customerRatio.toFixed(4);
+
+
+        document.getElementById(
+            "terminal-ratio"
+        ).textContent =
+            terminalRatio.toFixed(4);
+
+    }
+
+
+
+    /* =========================================================
+       AUTOMATIC RATIO UPDATE
+    ========================================================= */
+
+    [
+        "amount",
+        "customer-avg",
+        "terminal-avg"
+    ].forEach(id => {
+
+        document
+            .getElementById(id)
+            .addEventListener(
+                "input",
+                updateRatios
+            );
+
+    });
+
+
+    updateRatios();
+
+
+
+    /* =========================================================
+       CHECK API
+    ========================================================= */
+
+    async function checkAPI() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_URL}/health`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "API returned an error."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            if (data.model_loaded) {
+
+                apiStatus.textContent =
+                    "API ONLINE • MODEL LOADED";
+
+                systemStatus.textContent =
+                    "READY";
+
+                statusDot.style.background =
+                    "#22c55e";
+
+            } else {
+
+                apiStatus.textContent =
+                    "API ONLINE • MODEL ERROR";
+
+                systemStatus.textContent =
+                    "MODEL ERROR";
+
+                statusDot.style.background =
+                    "#f59e0b";
+
+            }
+
+
+        } catch (error) {
+
+            apiStatus.textContent =
+                "API OFFLINE";
+
+            systemStatus.textContent =
+                "OFFLINE";
+
+            statusDot.style.background =
+                "#ef4444";
+
+        }
+
+    }
+
+
+    checkAPI();
+
+
+
+    /* =========================================================
+       FORM SUBMISSION
+    ========================================================= */
+
+    form.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            updateRatios();
+
+
+            /* ---------------------------------------------
+               READ USER INPUT
+            --------------------------------------------- */
+
+            const amount =
+                numberValue("amount");
+
+            const txTime =
+                numberValue("tx-time");
+
+            const txDays =
+                numberValue("tx-days");
+
+            const hour =
+                numberValue("hour");
+
+            const day =
+                numberValue("day");
+
+            const dayMonth =
+                numberValue("day-month");
+
+            const month =
+                numberValue("month");
+
+
+            const customerTxCount =
+                numberValue(
+                    "customer-tx-count"
+                );
+
+            const customerAvg =
+                numberValue(
+                    "customer-avg"
+                );
+
+            const customerMax =
+                numberValue(
+                    "customer-max"
+                );
+
+
+            const terminalTxCount =
+                numberValue(
+                    "terminal-tx-count"
+                );
+
+            const terminalAvg =
+                numberValue(
+                    "terminal-avg"
+                );
+
+
+            /* ---------------------------------------------
+               RISK INDICATORS
+            --------------------------------------------- */
+
+            const weekend =
+                document.getElementById(
+                    "weekend"
+                ).checked
+                    ? 1
+                    : 0;
+
+
+            const night =
+                document.getElementById(
+                    "night"
+                ).checked
+                    ? 1
+                    : 0;
+
+
+            const highAmount =
+                document.getElementById(
+                    "high-amount"
+                ).checked
+                    ? 1
+                    : 0;
+
+
+            /* ---------------------------------------------
+               CALCULATED FEATURES
+            --------------------------------------------- */
+
+            const amountToCustomerAvg =
+                customerAvg > 0
+                    ? amount / customerAvg
+                    : 0;
+
+
+            const amountToTerminalAvg =
+                terminalAvg > 0
+                    ? amount / terminalAvg
+                    : 0;
+
+
+
+            /* =================================================
+               IMPORTANT:
+               THESE ARE THE EXACT 17 FEATURES EXPECTED
+               BY THE TRAINED MODEL.
+            ================================================= */
+
+            const payload = {
+
+                TX_AMOUNT:
+                    amount,
+
+                TX_TIME_SECONDS:
+                    txTime,
+
+                TX_TIME_DAYS:
+                    txDays,
+
+                HOUR:
+                    hour,
+
+                DAY_OF_WEEK:
+                    day,
+
+                DAY_OF_MONTH:
+                    dayMonth,
+
+                MONTH:
+                    month,
+
+                IS_WEEKEND:
+                    weekend,
+
+                IS_NIGHT:
+                    night,
+
+                CUSTOMER_TX_COUNT:
+                    customerTxCount,
+
+                CUSTOMER_AVG_AMOUNT:
+                    customerAvg,
+
+                CUSTOMER_MAX_AMOUNT:
+                    customerMax,
+
+                AMOUNT_TO_CUSTOMER_AVG:
+                    amountToCustomerAvg,
+
+                TERMINAL_TX_COUNT:
+                    terminalTxCount,
+
+                TERMINAL_AVG_AMOUNT:
+                    terminalAvg,
+
+                AMOUNT_TO_TERMINAL_AVG:
+                    amountToTerminalAvg,
+
+                HIGH_AMOUNT:
+                    highAmount
+
+            };
+
+
+            /* ---------------------------------------------
+               DEBUG
+            --------------------------------------------- */
+
+            console.log(
+                "SCAMGRAPH SENTINEL REQUEST:"
+            );
+
+            console.table(payload);
+
+
+
+            /* ---------------------------------------------
+               LOADING UI
+            --------------------------------------------- */
+
+            button.disabled = true;
+
+            button.textContent =
+                "⏳ ANALYZING TRANSACTION...";
+
+
+            resultBox.innerHTML = `
+
+                <div class="loading">
+
+                    <div class="spinner"></div>
+
+                    <strong>
+                        AI MODEL ANALYZING...
+                    </strong>
+
+                    <p style="margin-top:8px;">
+                        Calculating transaction risk.
+                    </p>
+
+                </div>
+
+            `;
+
+
+            try {
+
+
+                /* =========================================
+                   SEND TO FLASK
+                ========================================== */
+
+                const response =
+                    await fetch(
+                        `${API_URL}/predict`,
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    payload
+                                )
+                        }
+                    );
+
+
+                /* =========================================
+                   READ RESPONSE
+                ========================================== */
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "SCAMGRAPH SENTINEL RESPONSE:",
+                    data
+                );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.error ||
+                        "Prediction failed."
+                    );
+
+                }
+
+
+                if (
+                    data.success === false
+                ) {
+
+                    throw new Error(
+                        data.error ||
+                        "Model prediction failed."
+                    );
+
+                }
+
+
+                /* =========================================
+                   NORMALIZE RESPONSE
+                ========================================== */
+
+                const prediction =
+                    Number(
+                        data.prediction ?? 0
+                    );
+
+
+                const probability =
+                    Number(
+                        data.fraud_probability ?? 0
+                    );
+
+
+                const percentage =
+                    Number(
+                        data.fraud_percentage ??
+                        probability * 100
+                    );
+
+
+                const threshold =
+                    Number(
+                        data.threshold ?? 0.5
+                    );
+
+
+                const score =
+                    Number(
+                        data.score ?? 0
+                    );
+
+
+                const result =
+                    prediction === 1
+                        ? "FRAUD"
+                        : "LEGITIMATE";
+
+
+                /* =========================================
+                   FRAUD RESULT
+                ========================================== */
+
+                if (prediction === 1) {
+
+                    resultBox.innerHTML = `
+
+                        <div class="result-content">
+
+                            <div class="prediction-top">
+
+                                <span class="result-badge fraud">
+                                    🚨 FRAUD DETECTED
+                                </span>
+
+                                <span style="
+                                    color:#94a3b8;
+                                    font-size:11px;
+                                ">
+                                    Prediction ${prediction}
+                                </span>
+
+                            </div>
+
+
+                            <div class="risk-circle">
+
+                                <strong>
+                                    ${percentage.toFixed(2)}%
+                                </strong>
+
+                                <span>
+                                    FRAUD RISK
+                                </span>
+
+                            </div>
+
+
+                            <h2
+                                class="result-title"
+                                style="color:#ef4444;">
+
+                                FRAUD
+
+                            </h2>
+
+
+                            <p class="result-description">
+
+                                This transaction has been
+                                classified as potentially
+                                fraudulent by the trained
+                                SCAMGRAPH SENTINEL model.
+
+                            </p>
+
+
+                            <div class="result-metrics">
+
+                                <div class="metric">
+
+                                    <span>
+                                        Fraud Probability
+                                    </span>
+
+                                    <strong>
+                                        ${probability.toFixed(6)}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="metric">
+
+                                    <span>
+                                        Model Score
+                                    </span>
+
+                                    <strong>
+                                        ${score.toFixed(6)}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="metric">
+
+                                    <span>
+                                        Prediction
+                                    </span>
+
+                                    <strong>
+                                        ${prediction}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="metric">
+
+                                    <span>
+                                        Threshold
+                                    </span>
+
+                                    <strong>
+                                        ${threshold.toFixed(2)}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="fraud-warning">
+
+                                ⚠️ <strong>Risk Alert:</strong>
+
+                                The model probability is at or
+                                above the configured decision
+                                threshold. Further investigation
+                                is recommended.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+                /* =========================================
+                   LEGITIMATE RESULT
+                ========================================== */
+
+                else {
+
+                    resultBox.innerHTML = `
+
+                        <div class="result-content">
+
+                            <div class="prediction-top">
+
+                                <span class="result-badge legitimate">
+                                    ✓ LEGITIMATE
+                                </span>
+
+                                <span style="
+                                    color:#94a3b8;
+                                    font-size:11px;
+                                ">
+                                    Prediction ${prediction}
+                                </span>
+
+                            </div>
+
+
+                            <div class="risk-circle">
+
+                                <strong>
+                                    ${percentage.toFixed(2)}%
+                                </strong>
+
+                                <span>
+                                    FRAUD RISK
+                                </span>
+
+                            </div>
+
+
+                            <h2
+                                class="result-title"
+                                style="color:#22c55e;">
+
+                                LEGITIMATE
+
+                            </h2>
+
+
+                            <p class="result-description">
+
+                                This transaction appears
+                                legitimate according to the
+                                trained SCAMGRAPH SENTINEL model.
+
+                            </p>
+
+
+                            <div class="result-metrics">
+
+                                <div class="metric">
+
+                                    <span>
+                                        Fraud Probability
+                                    </span>
+
+                                    <strong>
+                                        ${probability.toFixed(6)}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="metric">
+
+                                    <span>
+                                        Model Score
+                                    </span>
+
+                                    <strong>
+                                        ${score.toFixed(6)}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="metric">
+
+                                    <span>
+                                        Prediction
+                                    </span>
+
+                                    <strong>
+                                        ${prediction}
+                                    </strong>
+
+                                </div>
+
+
+                                <div class="metric">
+
+                                    <span>
+                                        Threshold
+                                    </span>
+
+                                    <strong>
+                                        ${threshold.toFixed(2)}
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="legitimate-message">
+
+                                ✓ <strong>Low Risk:</strong>
+
+                                The calculated fraud probability
+                                is below the configured decision
+                                threshold.
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+
+
+            } catch (error) {
+
+
+                console.error(
+                    "Prediction error:",
+                    error
+                );
+
+
+                resultBox.innerHTML = `
+
+                    <div class="error-box">
+
+                        <strong>
+                            ❌ Prediction Failed
+                        </strong>
+
+                        <br><br>
+
+                        ${error.message}
+
+                        <br><br>
+
+                        Make sure Flask is running at:
+
+                        <br>
+
+                        <strong>
+                            http://127.0.0.1:5000
+                        </strong>
+
+                    </div>
+
+                `;
+
+            }
+
+
+            /* ---------------------------------------------
+               RESET BUTTON
+            --------------------------------------------- */
+
+            button.disabled = false;
+
+            button.textContent =
+                "🔍 ANALYZE TRANSACTION";
+
+        }
+
+    );
+
+</script>
+
+
+</body>
+</html>
